@@ -25,31 +25,41 @@ def load_neos(neo_csv_path):
     :return: A collection of `NearEarthObject`s.
     """
     neos = []
-    hazardous_map = {'Y': True, 'N': False}
+    hazardous_map = {"Y": True, "N": False}
     with open(neo_csv_path) as infile:
         reader = csv.reader(infile)
         header = next(reader)
         print(header)
         print(header.index("pdes"))
         for row in reader:
-            neos.append(NearEarthObject(
-                designation=row[header.index("pdes")],
-                name=row[header.index("name")],
-                diameter=row[header.index("diameter")],
-                hazardous=hazardous_map.get(row[header.index("pha")]),
-            ))
+            neos.append(
+                NearEarthObject(
+                    designation=row[header.index("pdes")],
+                    name=row[header.index("name")],
+                    diameter=row[header.index("diameter")],
+                    hazardous=hazardous_map.get(row[header.index("pha")]),
+                )
+            )
     return neos
 
 
 def load_approaches(cad_json_path):
     """Read close approach data from a JSON file.
 
-    :param neo_csv_path: A path to a JSON file containing data about close approaches.
+    :param cad_json_path: A path to a JSON file containing data about close approaches.
     :return: A collection of `CloseApproach`es.
     """
     with open(cad_json_path) as f:
+        close_approaches = []
         ca_dict = json.load(f)
-        ca_dict.keys()
-
-    return ()
-
+        header = ca_dict["fields"]
+        for row in ca_dict["data"]:
+            close_approaches.append(
+                CloseApproach(
+                    designation=row[header.index("des")],
+                    time=row[header.index("cd")],
+                    distance=row[header.index("dist")],
+                    velocity=row[header.index("v_rel")],
+                )
+            )
+    return close_approaches

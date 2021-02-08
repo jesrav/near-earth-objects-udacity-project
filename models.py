@@ -71,7 +71,9 @@ class CloseApproach:
     in kilometers per second.
     """
 
-    def __init__(self, neo: NearEarthObject, time, distance, velocity, **info):
+    def __init__(
+        self, designation, time, distance, velocity, neo: NearEarthObject = None, **info
+    ):
         """Create a new `CloseApproach`.
 
         :param neo: A Near earth object.
@@ -80,6 +82,7 @@ class CloseApproach:
         :param velocity: relative approach velocity in kilometers per second
         :param info: A dictionary of excess keyword arguments supplied to the constructor.
         """
+        self._designation = designation
         self.time = cd_to_datetime(time) if time else None
         self.distance = float(distance) if distance else float("nan")
         self.velocity = float(velocity) if velocity else float("nan")
@@ -92,8 +95,10 @@ class CloseApproach:
 
     def __str__(self):
         """Return `str(self)`."""
-        return f"At {self.time_str}, '{self.neo.fullname}' approaches Earth at a distance of {self.distance:.2f} " \
-               f"au and a velocity of {self.velocity:.2f} km/s."
+        return (
+            f"At {self.time_str}, '{self._designation}' approaches Earth at a distance of {self.distance:.2f} "
+            f"au and a velocity of {self.velocity:.2f} km/s."
+        )
 
     def __repr__(self):
         """Return `repr(self)`, a computer-readable string representation of this object."""
