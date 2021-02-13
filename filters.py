@@ -171,7 +171,7 @@ def create_filters(
         filters.append(DiameterFilter(operator.ge, diameter_min))
     if diameter_max:
         filters.append(DiameterFilter(operator.le, diameter_max))
-    if hazardous:
+    if hazardous is not None:
         filters.append(HazardousFilter(operator.eq, hazardous))
 
     return filters
@@ -187,4 +187,7 @@ def limit(iterator, n=None):
     :yield: The first (at most) `n` values from the iterator.
     """
     # TODO: Produce at most `n` values from the given iterator.
-    return islice(iterator, n)
+    if n:
+        return islice(iterator, n)
+    else:
+        return iterator
