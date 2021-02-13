@@ -11,6 +11,9 @@ data on NEOs and close approaches extracted by `extract.load_neos` and
 
 You'll edit this file in Tasks 2 and 3.
 """
+from typing import List
+
+from models import NearEarthObject, CloseApproach
 
 
 class NEODatabase:
@@ -22,7 +25,10 @@ class NEODatabase:
     querying for close approaches that match criteria.
     """
 
-    def __init__(self, neos, approaches):
+    def __init__(
+            self, neos: List[NearEarthObject],
+            approaches: List[CloseApproach],
+    ):
         """Create a new `NEODatabase`.
 
         As a precondition, this constructor assumes that the collections of NEOs
@@ -43,25 +49,34 @@ class NEODatabase:
         self._neos = neos
         self._approaches = approaches
 
-        # TODO: What additional auxiliary data structures will be useful?
+        # Mappings to make fetching the near earth and close encounter objects easier.
+        self._designation_neo_map = {}
+        self._name_neo_map = {}
+        for neo in neos:
+            self._designation_neo_map[neo.designation] = neo
+            self._name_neo_map[neo.name] = neo
 
-        # TODO: Link together the NEOs and their close approaches.
+        self._designation_approaches_map = {}
+        for approach in approaches:
+            if approach._designation in self._designation_approaches_map:
+                self._designation_approaches_map[approach._designation].append(approach)
+            else:
+                self._designation_approaches_map[approach._designation] = [approach]
+
+        # Link near earth objects and close encounter objects.
+        for neo in self._neos:
+            neo.approaches = self._designation_approaches_map.get(neo.designation, [])
+
+        for approach in self._approaches:
+            approach.neo = self._designation_neo_map.get(approach._designation, None)
 
     def get_neo_by_designation(self, designation):
         """Find and return an NEO by its primary designation.
 
-        If no match is found, return `None` instead.
-
-        Each NEO in the data set has a unique primary designation, as a string.
-
-        The matching is exact - check for spelling and capitalization if no
-        match is found.
-
         :param designation: The primary designation of the NEO to search for.
         :return: The `NearEarthObject` with the desired primary designation, or `None`.
         """
-        # TODO: Fetch an NEO by its primary designation.
-        return None
+        return self._designation_neo_map.get(designation, None)
 
     def get_neo_by_name(self, name):
         """Find and return an NEO by its name.
@@ -78,7 +93,10 @@ class NEODatabase:
         :return: The `NearEarthObject` with the desired name, or `None`.
         """
         # TODO: Fetch an NEO by its name.
-        return None
+        try:
+            return self._name_neo_map.get(name, None)
+        except KeyError:
+            raise ValueError(f"There is no near earth object with the name {name}")
 
     def query(self, filters=()):
         """Query close approaches to generate those that match a collection of filters.

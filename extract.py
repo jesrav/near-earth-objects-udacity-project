@@ -29,8 +29,6 @@ def load_neos(neo_csv_path):
     with open(neo_csv_path) as infile:
         reader = csv.reader(infile)
         header = next(reader)
-        print(header)
-        print(header.index("pdes"))
         for row in reader:
             neos.append(
                 NearEarthObject(
