@@ -13,8 +13,6 @@ the supplied `CloseApproach`.
 
 The `limit` function simply limits the maximum number of values produced by an
 iterator.
-
-You'll edit this file in Tasks 3a and 3c.
 """
 import operator
 from itertools import islice
@@ -78,30 +76,35 @@ class AttributeFilter:
 
 
 class DistanceFilter(AttributeFilter):
+    """A class for creating filters on the distance attribute."""
     @classmethod
     def get(cls, approach: CloseApproach) -> float:
         return approach.distance
 
 
 class VelocityFilter(AttributeFilter):
+    """A class for creating filters on the velocity attribute."""
     @classmethod
     def get(cls, approach: CloseApproach) -> float:
         return approach.velocity
 
 
 class DateFilter(AttributeFilter):
+    """A class for creating filters on the date part of the time attribute."""
     @classmethod
     def get(cls, approach: CloseApproach) -> float:
         return approach.time.date()
 
 
 class DiameterFilter(AttributeFilter):
+    """A class for creating filters on the diameter of the neo attribute."""
     @classmethod
     def get(cls, approach: CloseApproach) -> float:
         return approach.neo.diameter
 
 
 class HazardousFilter(AttributeFilter):
+    """A class for creating filters on the hazardous of the neo attribute."""
     @classmethod
     def get(cls, approach: CloseApproach) -> float:
         return approach.neo.hazardous
@@ -134,10 +137,6 @@ def create_filters(
     line (in particular, this means that the `--not-hazardous` flag results in
     `hazardous=False`, not to be confused with `hazardous=None`).
 
-    The return value must be compatible with the `query` method of `NEODatabase`
-    because the main module directly passes this result to that method. For now,
-    this can be thought of as a collection of `AttributeFilter`s.
-
     :param date: A `date` on which a matching `CloseApproach` occurs.
     :param start_date: A `date` on or after which a matching `CloseApproach` occurs.
     :param end_date: A `date` on or before which a matching `CloseApproach` occurs.
@@ -150,8 +149,6 @@ def create_filters(
     :param hazardous: Whether the NEO of a matching `CloseApproach` is potentially hazardous.
     :return: A collection of filters for use with `query`.
     """
-    # TODO: Decide how you will represent your filters.
-
     filters = []
     if date:
         filters.append(DateFilter(operator.eq, date))
@@ -180,13 +177,12 @@ def create_filters(
 def limit(iterator, n=None):
     """Produce a limited stream of values from an iterator.
 
-    If `n` is 0 or None, don't limit the iterator at all.
+    If `n` is 0 or None, the iterator is not limited.
 
     :param iterator: An iterator of values.
     :param n: The maximum number of values to produce.
     :yield: The first (at most) `n` values from the iterator.
     """
-    # TODO: Produce at most `n` values from the given iterator.
     if n:
         return islice(iterator, n)
     else:

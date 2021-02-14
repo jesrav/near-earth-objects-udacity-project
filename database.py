@@ -4,12 +4,6 @@ A `NEODatabase` holds an interconnected data set of NEOs and close approaches.
 It provides methods to fetch an NEO by primary designation or by name, as well
 as a method to query the set of close approaches that match a collection of
 user-specified criteria.
-
-Under normal circumstances, the main module creates one NEODatabase from the
-data on NEOs and close approaches extracted by `extract.load_neos` and
-`extract.load_approaches`.
-
-You'll edit this file in Tasks 2 and 3.
 """
 from typing import List, Union
 
@@ -89,18 +83,9 @@ class NEODatabase:
     def get_neo_by_name(self, name):
         """Find and return an NEO by its name.
 
-        If no match is found, return `None` instead.
-
-        Not every NEO in the data set has a name. No NEOs are associated with
-        the empty string nor with the `None` singleton.
-
-        The matching is exact - check for spelling and capitalization if no
-        match is found.
-
         :param name: The name, as a string, of the NEO to search for.
         :return: The `NearEarthObject` with the desired name, or `None`.
         """
-        # TODO: Fetch an NEO by its name.
         try:
             return self._name_neo_map.get(name, None)
         except KeyError:
