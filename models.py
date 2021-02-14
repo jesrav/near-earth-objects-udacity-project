@@ -46,17 +46,15 @@ class NearEarthObject:
 
     def serialize(self):
         return {
-            'designation': self.designation,
-            'name': self.name if self.name else "",
-            'diameter_km': self.diameter,
-            'potentially_hazardous': self.hazardous
+            "designation": self.designation,
+            "name": self.name if self.name else "",
+            "diameter_km": self.diameter,
+            "potentially_hazardous": self.hazardous,
         }
 
     def __str__(self):
         """Return `str(self)`."""
-        if self.hazardous is None:
-            return f"NEO {self.fullname} has a diameter of {self.diameter:.3f} km and [is/is not] potentially hazardous."
-        elif self.hazardous:
+        if self.hazardous:
             return f"NEO {self.fullname} has a diameter of {self.diameter:.3f} km and is potentially hazardous."
         else:
             return f"NEO {self.fullname} has a diameter of {self.diameter:.3f} km and is not potentially hazardous."
@@ -79,7 +77,12 @@ class CloseApproach:
     """
 
     def __init__(
-        self, designation, time, distance, velocity, neo: NearEarthObject = None,
+        self,
+        designation,
+        time,
+        distance,
+        velocity,
+        neo: NearEarthObject = None,
     ):
         """Create a new `CloseApproach`.
 
@@ -101,15 +104,15 @@ class CloseApproach:
 
     def serialize(self):
         return {
-            'datetime_utc': datetime_to_str(self.time),
-            'distance_au': self.distance,
-            'velocity_km_s': self.velocity,
+            "datetime_utc": datetime_to_str(self.time),
+            "distance_au": self.distance,
+            "velocity_km_s": self.velocity,
         }
 
     def __str__(self):
         """Return `str(self)`."""
         return (
-            f"At {self.time_str}, '{self._designation}' approaches Earth at a distance of {self.distance:.2f} "
+            f"At {self.time_str}, '{self.neo.fullname}' approaches Earth at a distance of {self.distance:.2f} "
             f"au and a velocity of {self.velocity:.2f} km/s."
         )
 

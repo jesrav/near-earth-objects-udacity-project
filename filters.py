@@ -77,6 +77,7 @@ class AttributeFilter:
 
 class DistanceFilter(AttributeFilter):
     """A class for creating filters on the distance attribute."""
+
     @classmethod
     def get(cls, approach: CloseApproach) -> float:
         return approach.distance
@@ -84,6 +85,7 @@ class DistanceFilter(AttributeFilter):
 
 class VelocityFilter(AttributeFilter):
     """A class for creating filters on the velocity attribute."""
+
     @classmethod
     def get(cls, approach: CloseApproach) -> float:
         return approach.velocity
@@ -91,6 +93,7 @@ class VelocityFilter(AttributeFilter):
 
 class DateFilter(AttributeFilter):
     """A class for creating filters on the date part of the time attribute."""
+
     @classmethod
     def get(cls, approach: CloseApproach) -> float:
         return approach.time.date()
@@ -98,6 +101,7 @@ class DateFilter(AttributeFilter):
 
 class DiameterFilter(AttributeFilter):
     """A class for creating filters on the diameter of the neo attribute."""
+
     @classmethod
     def get(cls, approach: CloseApproach) -> float:
         return approach.neo.diameter
@@ -105,6 +109,7 @@ class DiameterFilter(AttributeFilter):
 
 class HazardousFilter(AttributeFilter):
     """A class for creating filters on the hazardous of the neo attribute."""
+
     @classmethod
     def get(cls, approach: CloseApproach) -> float:
         return approach.neo.hazardous
