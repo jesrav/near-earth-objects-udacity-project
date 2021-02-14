@@ -7,19 +7,24 @@ write the data.
 These functions are invoked by the main module with the output of the `limit`
 function and the filename supplied by the user at the command line. The file's
 extension determines which of these functions is used.
-
-You'll edit this file in Part 4.
 """
 import csv
 import json
+from pathlib import Path
+from typing import List, Union
+
+from models import CloseApproach
 
 
-def write_to_csv(results, filename):
+def float_to_csv(field):
+    if field:
+        return field
+    else:
+        return 'nan'
+
+
+def write_to_csv(results: List[CloseApproach], filename: Union[Path, str]):
     """Write an iterable of `CloseApproach` objects to a CSV file.
-
-    The precise output specification is in `README.md`. Roughly, each output row
-    corresponds to the information in a single close approach from the `results`
-    stream and its associated near-Earth object.
 
     :param results: An iterable of `CloseApproach` objects.
     :param filename: A Path-like object pointing to where the data should be saved.
@@ -33,18 +38,40 @@ def write_to_csv(results, filename):
         "diameter_km",
         "potentially_hazardous",
     )
-    # TODO: Write the results to a CSV file, following the specification in the instructions.
+    with open(filename, mode='w') as csv_file:
+        close_approach_writer = csv.writer(csv_file, delimiter=',', quotechar='"', quoting=csv.QUOTE_MINIMAL)
+        close_approach_writer.writerow(fieldnames)
+        for result in results:
+            close_approach_dict = result.serialize()
+            close_approach_neo_dict = result.neo.serialize()
+            close_approach_writer.writerow([
+                close_approach_dict["datetime_utc"],
+                float_to_csv(close_approach_dict["distance_au"]),
+                float_to_csv(close_approach_dict["velocity_km_s"]),
+                close_approach_neo_dict["designation"],
+                close_approach_neo_dict["name"],
+                float_to_csv(close_approach_neo_dict["diameter_km"]),
+                close_approach_neo_dict["potentially_hazardous"],
+            ])
 
 
 def write_to_json(results, filename):
     """Write an iterable of `CloseApproach` objects to a JSON file.
 
-    The precise output specification is in `README.md`. Roughly, the output is a
-    list containing dictionaries, each mapping `CloseApproach` attributes to
-    their values and the 'neo' key mapping to a dictionary of the associated
-    NEO's attributes.
-
     :param results: An iterable of `CloseApproach` objects.
     :param filename: A Path-like object pointing to where the data should be saved.
     """
-    # TODO: Write the results to a JSON file, following the specification in the instructions.
+    with open(filename, mode='w') as json_file:
+        counter = 0
+        for result in results:
+            if counter == 0:
+                json_file.write('[')
+            else:
+                json_file.write(',')
+            result_dict = {**result.serialize(), **{"neo": result.neo.serialize()}}
+            json.dump(result_dict, json_file)
+            json_file.write('\n')
+            counter += 1
+        json_file.write(']')
+
+

@@ -1,4 +1,5 @@
 """Represent models for near-Earth objects and their close approaches."""
+import math
 
 from helpers import cd_to_datetime, datetime_to_str
 
@@ -42,6 +43,14 @@ class NearEarthObject:
             return f"{self.designation} ({self.name})"
         else:
             return f"{self.designation}"
+
+    def serialize(self):
+        return {
+            'designation': self.designation,
+            'name': self.name if self.name else "",
+            'diameter_km': self.diameter,
+            'potentially_hazardous': self.hazardous
+        }
 
     def __str__(self):
         """Return `str(self)`."""
@@ -89,6 +98,13 @@ class CloseApproach:
     def time_str(self):
         """Return a formatted representation of this `CloseApproach`'s approach time."""
         return f"{datetime_to_str(self.time)}"
+
+    def serialize(self):
+        return {
+            'datetime_utc': datetime_to_str(self.time),
+            'distance_au': self.distance,
+            'velocity_km_s': self.velocity,
+        }
 
     def __str__(self):
         """Return `str(self)`."""
