@@ -18,7 +18,6 @@ class NearEarthObject:
         name=None,
         diameter=None,
         hazardous=None,
-        **info,
     ):
         """Create a new `NearEarthObject`.
 
@@ -26,13 +25,12 @@ class NearEarthObject:
         :param name: IAU name
         :param diameter: Diameter of asteroid or meteor.
         :param hazardous: if the asteroid or meteor is hazardous
-        :param info: A dictionary of excess keyword arguments supplied to the constructor.
         """
 
         self.designation = designation
         self.name = None if name == "" else str(name)
         self.diameter = float(diameter) if diameter else float("nan")
-        self.hazardous = hazardous
+        self.hazardous = True if hazardous else False
 
         # Create an empty initial collection of linked approaches.
         self.approaches = []
@@ -72,7 +70,7 @@ class CloseApproach:
     """
 
     def __init__(
-        self, designation, time, distance, velocity, neo: NearEarthObject = None, **info
+        self, designation, time, distance, velocity, neo: NearEarthObject = None,
     ):
         """Create a new `CloseApproach`.
 
@@ -80,7 +78,6 @@ class CloseApproach:
         :param time: Time of close approach in NASA-formatted calendar date/time format.
         :param distance: Approach distance in astronomical units.
         :param velocity: relative approach velocity in kilometers per second
-        :param info: A dictionary of excess keyword arguments supplied to the constructor.
         """
         self._designation = designation
         self.time = cd_to_datetime(time) if time else None

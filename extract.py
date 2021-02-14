@@ -35,7 +35,7 @@ def load_neos(neo_csv_path):
                     designation=row[header.index("pdes")],
                     name=row[header.index("name")],
                     diameter=row[header.index("diameter")],
-                    hazardous=hazardous_map.get(row[header.index("pha")], False),
+                    hazardous=hazardous_map.get(row[header.index("pha")], None),
                 )
             )
     return neos
