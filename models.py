@@ -45,6 +45,7 @@ class NearEarthObject:
             return f"{self.designation}"
 
     def serialize(self):
+        """Return a dictionary with key attributes of the near earth object."""
         return {
             "designation": self.designation,
             "name": self.name if self.name else "",
@@ -103,6 +104,7 @@ class CloseApproach:
         return f"{datetime_to_str(self.time)}"
 
     def serialize(self):
+        """Return a dictionary with key attributes of the close approach."""
         return {
             "datetime_utc": datetime_to_str(self.time),
             "distance_au": self.distance,
